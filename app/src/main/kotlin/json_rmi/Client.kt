@@ -38,7 +38,7 @@ val json = Json {
     ignoreUnknownKeys = true
 }
 
-fun encodeArgument(arg: Any): JsonElement = when (arg) {
+fun encodeArgument(arg: Any?): JsonElement = when (arg) {
     is RemoteConstructable -> json.encodeToJsonElement(PolymorphicSerializer(RemoteConstructable::class), arg)
     is Player -> json.encodeToJsonElement(Player.serializer(), arg)
     is String -> JsonPrimitive(arg)
@@ -48,14 +48,13 @@ fun encodeArgument(arg: Any): JsonElement = when (arg) {
     else -> error("Unsupported argument type: \${arg::class}")
 }
 
-
-
 suspend fun DefaultClientWebSocketSession.invokeRemoteMethod(
     objectId: String,
     method: String,
-    vararg args: Any
+    args: List<Any?> = emptyList(),
+    logger: JsonLogger = JsonLogger(ignore = true),
 ): String {
-    val jsonArgs: List<JsonElement> = args.map { arg -> encodeArgument(arg) }
+    val jsonArgs: List<JsonElement> = args.map(transform = ::encodeArgument)
     val request = RemoteInvocationRequest(
         requestType = RpcConstants.TYPE_INVOKE,
         target = RpcConstants.TARGET_AGENT,
@@ -63,9 +62,32 @@ suspend fun DefaultClientWebSocketSession.invokeRemoteMethod(
         objectId = objectId,
         args = jsonArgs
     )
-    send(json.encodeToString(RemoteInvocationRequest.serializer(), request))
-    return (incoming.receive() as Frame.Text).readText()
+    val jsonRequest = json.encodeToString(RemoteInvocationRequest.serializer(), request)
+    logger.logSend(jsonRequest)
+    send(jsonRequest)
+
+    val response = (incoming.receive() as Frame.Text).readText()
+    logger.logRecv(response)
+    return response
 }
+
+//suspend fun DefaultClientWebSocketSession.invokeRemoteMethod(
+//    objectId: String,
+//    method: String,
+//    vararg args: Any,
+//    logger: JsonLogger = JsonLogger(ignore = true) // default: ignore = true,
+//): String {
+//    val jsonArgs: List<JsonElement> = args.map { arg -> encodeArgument(arg) }
+//    val request = RemoteInvocationRequest(
+//        requestType = RpcConstants.TYPE_INVOKE,
+//        target = RpcConstants.TARGET_AGENT,
+//        method = method,
+//        objectId = objectId,
+//        args = jsonArgs
+//    )
+//    send(json.encodeToString(RemoteInvocationRequest.serializer(), request))
+//    return (incoming.receive() as Frame.Text).readText()
+//}
 
 suspend fun DefaultClientWebSocketSession.initAgent(className: String): String {
     val request = RemoteInvocationRequest(
@@ -108,12 +130,9 @@ fun main() = runBlocking {
         val params = GameParams(numPlanets = 10, initialNeutralRatio = 0.0)
 
         val prepareResponse = invokeRemoteMethod(
-            objectId,
-            "prepareToPlayAs",
-            Player.Player1,
-            params,
-            "DummyOpponent",
-//            null
+            objectId=objectId,
+            method="prepareToPlayAs",
+            args = listOf(Player.Player1, params, "DummyOpponent", null),
         )
         println("prepareToPlayAs Response: $prepareResponse")
 
@@ -121,7 +140,7 @@ fun main() = runBlocking {
         val actionResponse = invokeRemoteMethod(
             objectId,
             "getAction",
-            gameState,
+            args = listOf(gameState),
         )
         println("getAction Response: $actionResponse")
 

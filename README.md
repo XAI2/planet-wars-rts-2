@@ -13,11 +13,13 @@ To run headless games use the examples in the `games.planetwars.runners` package
 
 To run games with a GUI, use the `games.planetwars.view.RunVisualGame` class.
 
-The following features are still under development:
+The following features are ready for community testing:
 
 * containerised version (PodMan or Docker)
-* some extra game features (TBA)
-* Python sample
+-- see [Submission Instructions](submit_entry.md)
+* [Python sample](app/src/main/python/client_server/game_agent_server.py) 
+
+
 
 ## Introduction
 

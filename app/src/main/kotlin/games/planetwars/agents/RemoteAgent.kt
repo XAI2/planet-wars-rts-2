@@ -29,11 +29,13 @@ fun main() {
 
 }
 
-class RemoteAgent (
+class RemoteAgent(
     private val className: String,
-    private val serverUrl: String = "ws://localhost:8080/ws"
+    private val port: Int = 8080,
+    private val logger: JsonLogger = JsonLogger() // default: ignore = true
 ) : PlanetWarsPlayer() {
 
+    private val serverUrl: String = "ws://localhost:$port/ws"
     private lateinit var session: DefaultClientWebSocketSession
     private lateinit var client: HttpClient
     private lateinit var objectId: String
@@ -50,7 +52,12 @@ class RemoteAgent (
             client.webSocket(serverUrl) {
                 session = this
                 objectId = initAgent(className)
-                invokeRemoteMethod(objectId, "prepareToPlayAs", player, params, opponent?: "Anonymous")
+                invokeRemoteMethod(
+                    objectId,
+                    method = "prepareToPlayAs",
+                    args = listOf(player, params, opponent ?: "Anonymous"),
+                    logger = logger,
+                )
             }
         }
         return getAgentType()
@@ -62,26 +69,52 @@ class RemoteAgent (
             var action: Action = Action.doNothing()
             client.webSocket(serverUrl) {
                 session = this
-                val response = invokeRemoteMethod(objectId, "getAction", gameState)
+                val response = invokeRemoteMethod(objectId, "getAction", args = listOf(gameState), logger = logger)
                 val jsonResp = json.parseToJsonElement(response).jsonObject
+//                print("Received response: $response\n")
                 val result = jsonResp["result"]
                 if (result != null && result is JsonObject) {
                     action = json.decodeFromJsonElement(Action.serializer(), result)
-                    println("Decoded Action: $action")
+//                    println("Decoded Action: $action")
                 }
             }
             action
         }
     }
 
-    override fun getAgentType(): String = "Remote[$className]"
+//    override fun getAgentType(): String = "Remote[$className]"
+
+    override fun getAgentType(): String = runBlocking {
+        ensureConnected()
+        if (!::objectId.isInitialized) {
+            // call prepare to play as
+            prepareToPlayAs(Player.Player1, GameParams(), opponent = "RemoteAgent")
+        }
+        println("In Remote Agent, object id: $objectId")
+        var agentType = "Remote[$className]" // fallback
+        client.webSocket(serverUrl) {
+            session = this
+            val response = invokeRemoteMethod(objectId, "getAgentType", args = emptyList(), logger = logger)
+            val jsonResp = json.parseToJsonElement(response).jsonObject
+            val result = jsonResp["result"]
+            if (result != null && result.toString().isNotBlank()) {
+                agentType = result.toString().trim('"')  // remove surrounding quotes
+            }
+        }
+        "$agentType (Remote)"
+    }
 
     override fun processGameOver(finalState: GameState) {
         runBlocking {
             ensureConnected()
             client.webSocket(serverUrl) {
                 session = this
-                invokeRemoteMethod(objectId, "processGameOver", finalState)
+                invokeRemoteMethod(
+                    objectId = objectId,
+                    method = "processGameOver",
+                    args = listOf(finalState),
+                    logger = logger,
+                )
                 endAgent(objectId)
             }
             client.close()

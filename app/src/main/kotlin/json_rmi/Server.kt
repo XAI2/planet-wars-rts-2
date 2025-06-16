@@ -30,6 +30,7 @@ fun decodeArgument(p: KParameter, jsonArg: JsonElement): Any = when (p.type.clas
     else -> json.decodeFromJsonElement(PolymorphicSerializer(RemoteConstructable::class), jsonArg)
 }
 
+
 fun main() {
     var frameCount = 0
     val agentMap = mutableMapOf<String, PlanetWarsAgent>()
@@ -59,9 +60,11 @@ fun main() {
                                     println("In INIT $agentMap")
                                     RemoteInvocationResponse("ok", json.encodeToJsonElement(mapOf("objectId" to id)))
                                 }
+
                                 RpcConstants.TYPE_INVOKE -> {
                                     val agent = agentMap[request.objectId] ?: error("No such object; frame $frameCount")
-                                    val kFunction = agent::class.members.firstOrNull { it.name == request.method } ?: error("Unknown method: ${request.method}")
+                                    val kFunction = agent::class.members.firstOrNull { it.name == request.method }
+                                        ?: error("Unknown method: ${request.method}")
                                     val params = kFunction.parameters.drop(1).mapIndexed { i, p ->
                                         decodeArgument(p, request.args[i])
                                     }
@@ -70,7 +73,12 @@ fun main() {
                                     println("In INVOKE: result $result")
 
                                     val encodedResult = when (result) {
-                                        is RemoteConstructable -> json.encodeToJsonElement(PolymorphicSerializer(RemoteConstructable::class), result)
+                                        is RemoteConstructable -> json.encodeToJsonElement(
+                                            PolymorphicSerializer(
+                                                RemoteConstructable::class
+                                            ), result
+                                        )
+
                                         is Player -> json.encodeToJsonElement(Player.serializer(), result)
                                         is String -> JsonPrimitive(result)
                                         is Int -> JsonPrimitive(result)
@@ -87,11 +95,13 @@ fun main() {
 //                                    }
                                     RemoteInvocationResponse("ok", encodedResult)
                                 }
+
                                 RpcConstants.TYPE_END -> {
                                     val removed = agentMap.remove(request.objectId)
                                     val msg = if (removed != null) "Agent removed" else "No such agent"
                                     RemoteInvocationResponse("ok", json.encodeToJsonElement(mapOf("message" to msg)))
                                 }
+
                                 else -> throw IllegalArgumentException("Unknown request type: ${request.requestType}")
                             }
                         } catch (e: Exception) {
