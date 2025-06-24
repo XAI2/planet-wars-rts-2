@@ -1,12 +1,12 @@
-### Greedy Heuristic Agent (Remote) Evaluation
+### TorchAgent PlanetWarsAgentMLP models/PlanetWarsForwardModel__ppo__random__adj_False__1__1750435224_final.pt (Remote) Evaluation
 
 | Opponent | Win Rate % | Games Played |
 |----------|------------|---------------|
-| Pure Random Agent | 100.0 | 10 |
-| Better Random Agent | 100.0 | 10 |
-| Careful Random Agent | 60.0 | 10 |
-| Greedy Heuristic Agent | 10.0 | 10 |
-| EvoAgent-200-20-0.5-true | 80.0 | 10 |
-| **Overall Average** | **70.0** | **50** |
+| Pure Random Agent | 50.0 | 10 |
+| Better Random Agent | 10.0 | 10 |
+| Careful Random Agent | 0.0 | 10 |
+| Greedy Heuristic Agent | 20.0 | 10 |
+| EvoAgent-200-20-0.5-true | 0.0 | 10 |
+| **Overall Average** | **16.0** | **50** |
 
-AVG=70.0
+AVG=16.0
