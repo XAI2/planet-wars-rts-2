@@ -6,8 +6,10 @@ import games.planetwars.agents.PlanetWarsAgent
 import games.planetwars.agents.RemoteAgent
 import games.planetwars.agents.evo.SimpleEvoAgent
 import games.planetwars.agents.random.BetterRandomAgent
+import games.planetwars.agents.random.SmarterAgent
 import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.agents.random.PureRandomAgent
+import games.planetwars.agents.random.SmarterAgent3
 import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
@@ -42,9 +44,11 @@ fun main() {
 class SamplePlayerLists {
     fun getRandomTrio(): MutableList<PlanetWarsAgent> {
         return mutableListOf(
-            PureRandomAgent(),
-            BetterRandomAgent(),
+    //        PureRandomAgent(),
+    //        BetterRandomAgent(),
             CarefulRandomAgent(),
+            SmarterAgent(),
+            SmarterAgent3(),
         )
     }
 
@@ -74,8 +78,8 @@ class SamplePlayerLists {
 
 data class RoundRobinLeague(
     val agents: List<PlanetWarsAgent>,
-    val gamesPerPair: Int = 10,
-    val gameParams: GameParams = GameParams(numPlanets = 20),
+    val gamesPerPair: Int = 5,
+    val gameParams: GameParams = GameParams(numPlanets = 10),
     val runRemoteAgents: Boolean = false, // if true, will run remote agents
     val timeout: Long = 10, // timeout in milliseconds for remote agents
 ) {

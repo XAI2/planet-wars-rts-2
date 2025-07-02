@@ -4,9 +4,6 @@ import games.planetwars.agents.Action
 import games.planetwars.agents.PlanetWarsPlayer
 import games.planetwars.agents.hybrid.GameStateWrapper
 import games.planetwars.core.*
-import util.Vec2d
-import kotlin.math.min
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 class RHEAAgent(

@@ -4,8 +4,6 @@ import games.planetwars.agents.Action
 import games.planetwars.agents.PlanetWarsPlayer
 import games.planetwars.core.GameState
 import games.planetwars.core.Player
-import games.planetwars.core.Planet
-import kotlin.math.max
 
 /*
     * Greedy Heuristic Agent for Planet Wars

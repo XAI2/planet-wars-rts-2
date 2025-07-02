@@ -3,9 +3,6 @@ package games.planetwars.agents.random
 import games.planetwars.agents.Action
 import games.planetwars.agents.PartialObservationPlayer
 import games.planetwars.core.Observation
-import games.planetwars.core.Player
-import kotlin.math.sqrt
-import kotlin.random.Random
 
 class PartialObservationHybridAgent : PartialObservationPlayer() {
 

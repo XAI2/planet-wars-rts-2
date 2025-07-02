@@ -3,9 +3,7 @@ package games.planetwars.agents.random
 import games.planetwars.agents.Action
 import games.planetwars.agents.PartialObservationPlayer
 import games.planetwars.core.Observation
-import games.planetwars.core.Player
 import util.Vec2d
-import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
 
