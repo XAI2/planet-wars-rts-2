@@ -20,7 +20,7 @@ fun main() {
 
     val agents = SamplePlayerLists().getRandomTrio()
 
-    agents.add(GreedyHeuristicAgent())
+   // agents.add(GreedyHeuristicAgent())
     val remoteAgent = RemoteAgent("<specified by remote server>", port = 9003)
 
 //    agents.add(remoteAgent)

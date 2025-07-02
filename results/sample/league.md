@@ -1,6 +1,5 @@
 | Rank | Agent Name | Win Rate % | Played |
 |------|------------|----------|--------|
-| 1 | Greedy Heuristic Agent | 72,7 | 600 |
-| 2 | Smarter Agent | 48,8 | 600 |
-| 3 | Careful Random Agent | 47,8 | 600 |
-| 4 | SmarterAgent4:PopRHEA+Greedy+Elitism | 30,7 | 600 |
+| 1 | Smarter Agent | 65,3 | 400 |
+| 2 | Careful Random Agent | 50,5 | 400 |
+| 3 | SmarterAgent4:PopRHEA+Greedy+Elitism | 34,3 | 400 |

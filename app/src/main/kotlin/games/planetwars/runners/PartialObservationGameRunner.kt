@@ -3,11 +3,15 @@ package games.planetwars.runners
 import games.planetwars.agents.PartialObservationAgent
 import games.planetwars.agents.random.PartialObservationBetterRandomAgent
 import games.planetwars.agents.random.PartialObservationPureRandomAgent
+// PartialObservationSmarterAgent
 import games.planetwars.core.*
 
 data class PartialObservationGameRunner(
     val agent1: PartialObservationAgent,
-    val agent2: PartialObservationAgent,
+ //   val agent2: PartialObservationAgent,
+
+    val agent2: PartialObservationBetterRandomAgent,
+
     val gameParams: GameParams,
 ) {
     var gameState: GameState = GameStateFactory(gameParams).createGame()
