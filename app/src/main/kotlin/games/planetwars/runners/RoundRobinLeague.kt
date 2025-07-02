@@ -9,7 +9,8 @@ import games.planetwars.agents.random.BetterRandomAgent
 import games.planetwars.agents.random.SmarterAgent
 import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.agents.random.PureRandomAgent
-import games.planetwars.agents.random.SmarterAgent3
+// import games.planetwars.agents.random.RHEAAgent3
+import games.planetwars.agents.random.SmarterAgent4
 import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
@@ -48,7 +49,10 @@ class SamplePlayerLists {
     //        BetterRandomAgent(),
             CarefulRandomAgent(),
             SmarterAgent(),
-            SmarterAgent3(),
+            SmarterAgent4(),
+//            SmarterAgent3(),
+//            RHEAAgent3(),
+
         )
     }
 

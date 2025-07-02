@@ -31,7 +31,7 @@ class SmarterAgent3 : PlanetWarsPlayer() {
         return Action(player, source.id, target.id, numShipsToSend.toDouble())
     }
 
-    override fun getAgentType(): String = "Optimized Smarter Agent 2"
+    override fun getAgentType(): String = "Optimized Smarter Agent 3"
 }
 
 // For quick testing
