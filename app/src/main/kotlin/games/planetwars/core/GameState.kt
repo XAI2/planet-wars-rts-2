@@ -1,5 +1,9 @@
 package games.planetwars.core
 
+
+
+import kotlin.math.sqrt
+import kotlin.math.pow
 import json_rmi.RemoteConstructable
 import kotlinx.serialization.Serializable
 import util.Vec2d
@@ -40,6 +44,10 @@ data class Transporter (
     val destinationIndex: Int,
     val nShips: Double,
 ) : RemoteConstructable{
+
+
+//    val distance = sqrt((source.position.x - it.position.x).pow(2) + (source.position.y - it.position.y).pow(2))
+
 
 }
 
