@@ -96,8 +96,8 @@ fun main() {
     val gameState = GameState(planets = listOf(planet1, planet2), gameTick = 10)
 
     val observationForPlayer1 = ObservationFactory.create(gameState, setOf(Player.Player1))
-    val observationForPlayer2 = ObservationFactory.create(gameState, setOf(Player.Player2), includeTransporterLocations = false)
-
+//    val observationForPlayer2 = ObservationFactory.create(gameState, setOf(Player.Player2), includeTransporterLocations = false)
+    val observationForPlayer2 = ObservationFactory.create(gameState, setOf(Player.Player2), includeTransporterLocations = true)
     println("Observation for Player 1:")
     println(observationForPlayer1)
     println("\nObservation for Player 2:")

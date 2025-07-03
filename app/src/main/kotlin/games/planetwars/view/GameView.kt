@@ -12,10 +12,12 @@ class GameView(
     val colors: ColorScheme = ColorScheme(),
     var gameRunner: GameRunner? = null,
     var paused: Boolean = false,
-    var showInfoFor: Set<Player> = setOf(
+
+//    The default GameView (unless planets/fleets are hidden by showInfoFor) is fully observable if you include all players in showInfoFor.
+var showInfoFor: Set<Player> = setOf(
         Player.Player1,
-//        Player.Player2,
-//        Player.Neutral,
+        Player.Player2,
+        Player.Neutral,
     ),
 ) : XApp {
 
@@ -155,6 +157,7 @@ fun main() {
         height = 200,
     )
     val gameState = GameStateFactory(params).createGame()
+
     for (planet in gameState.planets) {
         println(planet)
     }
